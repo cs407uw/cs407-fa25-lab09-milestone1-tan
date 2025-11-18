@@ -49,7 +49,7 @@ class BallViewModel : ViewModel() {
 
                 currentBall.updatePositionAndVelocity(
                     xAcc = -event.values[0],
-                    yAcc = -event.values[1],
+                    yAcc = event.values[1],
                     dT = dT
                 )
 

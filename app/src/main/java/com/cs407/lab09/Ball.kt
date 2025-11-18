@@ -1,5 +1,7 @@
 package com.cs407.lab09
 
+import kotlin.math.min
+
 /**
  * Represents a ball that can move. (No Android UI imports!)
  *
@@ -21,6 +23,7 @@ class Ball(
     private var accY = 0f
 
     private var isFirstUpdate = true
+    private val accelerationScale = min(backgroundWidth, backgroundHeight) / 8f
 
     init {
         reset()
@@ -31,25 +34,28 @@ class Ball(
      * (See lab handout for physics equations)
      */
     fun updatePositionAndVelocity(xAcc: Float, yAcc: Float, dT: Float) {
+        val scaledXAcc = xAcc * accelerationScale
+        val scaledYAcc = yAcc * accelerationScale
+
         if (isFirstUpdate) {
             isFirstUpdate = false
-            accX = xAcc
-            accY = yAcc
+            accX = scaledXAcc
+            accY = scaledYAcc
             return
         }
 
         val dtSquared = dT * dT
-        val deltaX = velocityX * dT + (dtSquared / 6f) * (3f * accX + xAcc)
-        val deltaY = velocityY * dT + (dtSquared / 6f) * (3f * accY + yAcc)
+        val deltaX = velocityX * dT + (dtSquared / 6f) * (3f * accX + scaledXAcc)
+        val deltaY = velocityY * dT + (dtSquared / 6f) * (3f * accY + scaledYAcc)
 
         posX += deltaX
         posY += deltaY
 
-        velocityX += (accX + xAcc) * 0.5f * dT
-        velocityY += (accY + yAcc) * 0.5f * dT
+        velocityX += (accX + scaledXAcc) * 0.5f * dT
+        velocityY += (accY + scaledYAcc) * 0.5f * dT
 
-        accX = xAcc
-        accY = yAcc
+        accX = scaledXAcc
+        accY = scaledYAcc
 
         checkBoundaries()
     }
